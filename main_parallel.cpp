@@ -65,11 +65,7 @@ void pre_process_grey() {
 	}
 }
 
-/*
-	Does the image creation.
-	Allocates memory for the images in GPU.
-	Copies the RGBA image from CPU to GPU (host to device).
-*/
+
 void pre_process(uchar4 **h_rgba, unsigned char **h_grey,
                  uchar4 **d_rgba, unsigned char **d_grey,
                  const string &in_file) {
