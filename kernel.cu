@@ -10,9 +10,6 @@
 
 using namespace std;
 
-/*
-	Reports the location of the occured error and exits the program
-*/
 template<typename T>
 void check(T err, const char* const func, const char* const file, 
 			const int line) {
@@ -23,23 +20,6 @@ void check(T err, const char* const func, const char* const file,
 	}
 }
 
-/*
-	The primary kernel (heart of the program!)
-	Each pixel p in the RGBA image is a struct of four unsigned chars:
-		- p.x Which is the red channel number.
-		- p.y The green channel.
-		- p.z The blue channel.
-		- p.w The alpha channel (which we ignore).
-	For each greyscale pixel to be created we calculate this formula:
-		p = .299*p.x + .587*p.y + .114*p.z
-	The output is a single char because we only have one channel.
-	
-	In the kernel each thread is responsible for calculating the mentioned
-	formula for each pixel and the put the result into the greyscale
-	image placehold.
-	First we find out where the thread (pixel) is and then we do the 
-	above.
-*/
 __global__
 void rgba_to_grey(uchar4 *const d_rgba, unsigned char *const d_grey, 
 					size_t rows, size_t cols) {
@@ -52,11 +32,6 @@ void rgba_to_grey(uchar4 *const d_rgba, unsigned char *const d_grey,
 	d_grey[i * cols + j] = (unsigned char) (0.299f * p.x + 0.587f * p.y + 0.114f * p.z);
 }
 
-/*
-	The image is divided into number of blocks.
-	Each block holds BLOCK_WIDTH*BLOCK_WIDTH threads and in total we have
-	(rows/BLOCK_WIDTH)*(cols/BLOCK_WIDTH) blocks.
-*/
 void rgba_to_grey_launcher(uchar4 *const d_rgba, unsigned char *const d_grey,
 							size_t rows, size_t cols) {
     const dim3 block_size (BLOCK_WIDTH, BLOCK_WIDTH, 1);
